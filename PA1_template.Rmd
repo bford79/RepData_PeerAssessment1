@@ -4,7 +4,7 @@ output:
   html_document:
     keep_md: true
 ---
-##Load Packages
+## Load Packages
 First of all, my script uses some packages, so we must install and load
 them if necessary.
 
@@ -39,15 +39,13 @@ med <- as.integer(median(meansteps$steps, na.rm = T))
 ```
 
 The plot:
-```{r, echo=TRUE}
-png(file = "plot1.png", width = 480, height = 480)
+```{r, echo=TRUE,}
 hist(meansteps$steps, breaks = 20, main = "Mean Steps/Day Histogram", 
      xlab = "Mean Steps/Day", ylab = "Frequency")
 abline(v = mean, col = "blue", lwd = 2)
 abline(v = med, col = "red", lwd = 2, lty = 2)
 legend("topright", legend = paste(c("Mean", "Median"), c(mean, med), 
                                   sep = " = "), col=c("blue", "red"), lwd=2)
-dev.off()
 ```
 
 
@@ -61,14 +59,12 @@ intmeans <- act %>% group_by(interval) %>% select(interval, steps) %>%
 
 The plot:
 ```{r, echo=TRUE}
-png(file = "plot2.png", width = 480, height = 480)
 plot(intmeans$interval, intmeans$steps, type = "l", main = "Mean Steps/Interval", 
      xlab = "Interval", ylab = "Steps")
 abline(v = intmeans[which(intmeans$steps == max(intmeans$steps, na.rm = T)),1],
        col = "red", lwd = 1)
 legend("topright", col = "red", lwd = 1, legend = paste("Max Steps Interval", 
           intmeans[which(intmeans$steps == max(intmeans$steps, na.rm = T)),1], sep = " = "))
-dev.off()
 ```
 
 Interval 835 achieved the highest average number of steps. Congratulations, 835!
@@ -78,7 +74,7 @@ Interval 835 achieved the highest average number of steps. Congratulations, 835!
 For all NA values in the orginal data, I inserted the average number of steps for that interval.
 
 ```{r}
-actfilled <- tbl_df(actfilled)
+actfilled <- tbl_df(act)
 meanstepsfilled <- actfilled %>% group_by(date) %>% select(date, steps) %>% summarise_each(funs(sum))
 mean <- as.integer(mean(meanstepsfilled$steps, na.rm = T))
 med <- as.integer(median(meanstepsfilled$steps, na.rm = T))
@@ -88,14 +84,12 @@ We see from the following plot that this does not change the mean and only sligh
 the median.
 
 ```{r, echo=TRUE}
-png(file = "plot3.png", width = 480, height = 480)
 hist(meanstepsfilled$steps, breaks = 20, main = "Mean Steps/Day Histogram 2", 
      xlab = "Mean Steps/Day", ylab = "Frequency")
 abline(v = mean, col = "blue", lwd = 2)
 abline(v = med, col = "red", lwd = 2, lty = 2)
 legend("topright", legend = paste(c("Mean", "Median"), c(mean, med), 
                                   sep = " = "), col=c("blue", "red"), lwd=2)
-dev.off()
 ```
 
 Of course the total daily number of steps did increase by 86,129.5.
@@ -131,10 +125,7 @@ The plot shows us that the mean number of steps on a weekend is lower before abo
 interval 900, but is generally higher for the rest of the day. 
 
 ```{r, echo=TRUE}
-png(file = "plot4.png", width = 480, height = 480)
-densityplot(~interval|type, data = wkend)
 xyplot(steps~interval|type, ylab="Steps", xlab="Interval", 
  main="Steps/Interval by Day Type", layout=(c(1,2)), type = "l", data = wkend)
-dev.off()
 ```
 
