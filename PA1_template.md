@@ -26,6 +26,18 @@ library(lattice)
 
 ```r
 act <- read.csv("activity.csv")
+```
+
+```
+## Warning in file(file, "rt"): cannot open file 'activity.csv': No such file
+## or directory
+```
+
+```
+## Error in file(file, "rt"): cannot open the connection
+```
+
+```r
 act <- tbl_df(act)
 ```
 
@@ -44,15 +56,22 @@ med <- as.integer(median(meansteps$steps, na.rm = T))
 The plot:
 
 ```r
+png(file = "plot1.png", width = 480, height = 480)
 hist(meansteps$steps, breaks = 20, main = "Mean Steps/Day Histogram", 
      xlab = "Mean Steps/Day", ylab = "Frequency")
 abline(v = mean, col = "blue", lwd = 2)
 abline(v = med, col = "red", lwd = 2, lty = 2)
 legend("topright", legend = paste(c("Mean", "Median"), c(mean, med), 
                                   sep = " = "), col=c("blue", "red"), lwd=2)
+dev.off()
 ```
 
 ![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png) 
+
+```
+## RStudioGD 
+##         2
+```
 
 
 ## What is the average daily activity pattern?
@@ -67,15 +86,22 @@ intmeans <- act %>% group_by(interval) %>% select(interval, steps) %>%
 The plot:
 
 ```r
+png(file = "plot2.png", width = 480, height = 480)
 plot(intmeans$interval, intmeans$steps, type = "l", main = "Mean Steps/Interval", 
      xlab = "Interval", ylab = "Steps")
 abline(v = intmeans[which(intmeans$steps == max(intmeans$steps, na.rm = T)),1],
        col = "red", lwd = 1)
 legend("topright", col = "red", lwd = 1, legend = paste("Max Steps Interval", 
           intmeans[which(intmeans$steps == max(intmeans$steps, na.rm = T)),1], sep = " = "))
+dev.off()
 ```
 
 ![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png) 
+
+```
+## RStudioGD 
+##         2
+```
 
 Interval 835 achieved the highest average number of steps. Congratulations, 835!
 
@@ -96,15 +122,22 @@ the median.
 
 
 ```r
+png(file = "plot3.png", width = 480, height = 480)
 hist(meanstepsfilled$steps, breaks = 20, main = "Mean Steps/Day Histogram 2", 
      xlab = "Mean Steps/Day", ylab = "Frequency")
 abline(v = mean, col = "blue", lwd = 2)
 abline(v = med, col = "red", lwd = 2, lty = 2)
 legend("topright", legend = paste(c("Mean", "Median"), c(mean, med), 
                                   sep = " = "), col=c("blue", "red"), lwd=2)
+dev.off()
 ```
 
 ![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png) 
+
+```
+## RStudioGD 
+##         2
+```
 
 Of course the total daily number of steps did increase by 86,129.5.
 
@@ -142,15 +175,17 @@ interval 900, but is generally higher for the rest of the day.
 
 
 ```r
+png(file = "plot4.png", width = 480, height = 480)
 densityplot(~interval|type, data = wkend)
+xyplot(steps~interval|type, ylab="Steps", xlab="Interval", 
+ main="Steps/Interval by Day Type", layout=(c(1,2)), type = "l", data = wkend)
+dev.off()
 ```
 
 ![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-1.png) 
 
-```r
-xyplot(steps~interval|type, ylab="Steps", xlab="Interval", 
- main="Steps/Interval by Day Type", layout=(c(1,2)), type = "l", data = wkend)
 ```
-
-![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-2.png) 
+## RStudioGD 
+##         2
+```
 
